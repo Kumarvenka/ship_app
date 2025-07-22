@@ -48,3 +48,15 @@ mongoose.connect(process.env.MONGO_URI, {
 .catch((err) => {
   console.error('❌ MongoDB connection error:', err);
 });
+
+// Serve React frontend in production
+const path = require("path");
+
+if (process.env.NODE_ENV === "production") {
+  const __dirnamePath = path.resolve();  // current absolute path
+  app.use(express.static(path.join(__dirnamePath, "frontend", "dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirnamePath, "frontend", "dist", "index.html"));
+  });
+}
